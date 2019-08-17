@@ -14,7 +14,7 @@ port = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3)
 temp_sensor_path = '/sys/bus/w1/devices/28-020791774287/w1_slave'
 
 #defining specefic user id for a device
-uID = 
+uID = 1
 
 enableMotion=False
 enableButtons=False
