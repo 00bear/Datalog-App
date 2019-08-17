@@ -492,17 +492,15 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
 
 
   try:
-	  cmd = "AT+HTTPACTION=1"
-	  # 0 for get and 1 for post
-	  result = execute(cmd)
-	
-	  print("Action Result "+result)
-	 
-	  if "ERROR" in result:
-	
-	    close_all()
-	
-    	    return -1
+    cmd = "AT+HTTPACTION=1"
+    # 0 for get and 1 for post
+    result = execute(cmd)
+
+    print("Action Result "+result)
+
+    if "ERROR" in result:
+      close_all()
+      return -1
   except:
     print("Post Error")
     return 20
@@ -512,17 +510,15 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
 #+HTTPACTION: 1,603,0. its network error.
 
   try:
-	  cmd = "AT+HTTPTERM"
-	
-	  result = execute(cmd)
-	
-	  print("Termination Result "+result)
-	
-	  if "ERROR" in result:
-	
-	    close_all()
-	
-   	    return -1
+    cmd = "AT+HTTPTERM"
+
+    result = execute(cmd)
+
+    print("Termination Result "+result)
+
+    if "ERROR" in result:
+      close_all()
+      return -1
   except:
     	  print("Http Terminate Error")
     	  return 20
@@ -604,21 +600,19 @@ def b4(self):
       relayHandle(3,0)
 
 def recursiveMethod():
-	temp = str(tempRead())
-        time.sleep(0.2)
-        date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
-        print("Date: ", date)
-        powerOnGps()
-        time.sleep(0.2)
-	lng,lat = read_gps(0)
-        time.sleep(0.2)
-        motionS = 1
-	
-        
-        
-        code = send_gsm(temp,date,lng,lat,motionS,1)
-        time.sleep(0.2)
-        return code
+  temp = str(tempRead())
+  time.sleep(0.2)
+  date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
+  print("Date: ", date)
+  powerOnGps()
+  time.sleep(0.2)
+  lng,lat = read_gps(0)
+  time.sleep(0.2)
+  motionS = 1
+	     
+  code = send_gsm(temp,date,lng,lat,motionS,1)
+  time.sleep(0.2)
+  return code
  
 def init_all():
 
@@ -675,7 +669,7 @@ def testFunctionMotion():
     while testMotion ==1:
       if(motionVal == 1):
         print("Motion 1")
-	motionVal = 0
+        motionVal = 0
       print("Motion Loop")
       time.sleep(2)
 
@@ -688,7 +682,7 @@ def systemInit():
       initReturn = init_all()
       if(initReturn == 200):
         initStatus = 2
-	print("Modem Initilized")
+        print("Modem Initilized")
       time.sleep(2)
 
 
@@ -698,12 +692,12 @@ def initGprsParams():
     while gprsInit == 0:
       simActive = init_Gprs()
       if(simActive == 20):
-	print("Not Registered On Network: ", simActive)
+        print("Not Registered On Network: ", simActive)
       elif(simActive == -1):
-	print("GPRS not Active: ", simActive)
+        print("GPRS not Active: ", simActive)
       elif(simActive == 200):
-	gprsInit = 1
-	print("Sim Registered for GPRS: ", simActive)
+        gprsInit = 1
+        print("Sim Registered for GPRS: ", simActive)
       time.sleep(1)
   except:
     return 20
@@ -736,13 +730,13 @@ def startLogging():
         time.sleep(0.2)
         #lng,lat = read_gps(0)
         location = 0
-	while location < 2:
-	  if(len(lat) <= 3 and len(lng) <= 3):
+        while location < 2:
+          if(len(lat) <= 3 and len(lng) <= 3):
             lng,lat = read_gps(0)
             print("GPS reading")
             time.sleep(1)
           else:
-	    location = 2
+            location = 2
             print("Location acquired")
         time.sleep(0.2)
         code = send_gsm(temp,date,lng,lat,motionS,1)
@@ -765,7 +759,7 @@ def startLogging():
            #print("Executing Again "+str(code))
            #tryCode = recursiveMethod()
            #continue
-	continue
+        continue
    
 def main(motionV):
     
