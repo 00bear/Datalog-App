@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 
 from time import strftime
 import time
@@ -375,6 +376,20 @@ def getDataBytes(st):
    
    return len(st.encode('utf-8'))
 
+def get_url(temp, date, lng, lat, motion):
+  qdict = url = {
+    'datetime': date,
+    'temprature': temp,
+    'latitude:': lat,
+    'longiture': lng,
+    'motion': motion,
+    'userId': uID
+    }
+
+  base = "http://www.cleartemp.site/datalog/savedatalog.php?"
+  qstring = urllib.parse.urlencode(qdict)
+  return base + qstring
+
 def send_gsm(temp, date, lng, lat, motion, firsttime):
     
   global motionVal, uID
@@ -422,22 +437,15 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
      #cmd = "AT+HTTPPARA=\"URL\",\"http://hologram.io/test.html"
      # no network response from hologram io test
      
-     cmd = "AT+HTTPPARA=\"URL\",\"http://www.cleartemp.site/datalog/savedatalog.php?"
+     cmd = 'AT+HTTPPARA="URL","' + get_url(temp, date, lng, lat, motion) + '"'
      #cmd = "AT+HTTPPARA=\"URL\",\""
      time.sleep(0.05)
-     cmd+="&datetime="+str(date)
      dataStr += "datetime="+str(date)
-     cmd += "&temprature="+str(temp)
      dataStr += "temprature="+str(temp)
-     cmd += "&latitude="+str(lat)
      dataStr += "latitude="+str(lat)
-     cmd += "&longitude="+str(lng)
      dataStr += "longitude="+str(lng)
-     cmd += "&motion="+str(motion)
      dataStr += "motion="+str(motion)
-     cmd += "&userId="+str(uID)
      dataStr += "userId="+str(uID)
-     cmd+="\""
      print('cmd=======',cmd)
      time.sleep(0.05)
      result = execute(cmd)
