@@ -709,6 +709,7 @@ def startLogging():
     lat = '0'
     code = 0
     var = 1
+    motionS = 0
     while var == 1:
       print("Running Forever")
       if(enableMotion == False):
