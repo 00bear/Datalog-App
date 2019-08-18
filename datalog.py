@@ -380,7 +380,7 @@ def get_url(temp, date, lng, lat, motion):
   qdict = url = {
     'datetime': date,
     'temprature': temp,
-    'latitude:': lat,
+    'latitude': lat,
     'longitude': lng,
     'motion': motion,
     'userId': uID
