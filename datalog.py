@@ -381,7 +381,7 @@ def get_url(temp, date, lng, lat, motion):
     'datetime': date,
     'temprature': temp,
     'latitude:': lat,
-    'longiture': lng,
+    'longitude': lng,
     'motion': motion,
     'userId': uID
     }
