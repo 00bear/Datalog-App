@@ -50,7 +50,7 @@ relayState=[0,0,0,0]
 
 class Command(object):
   """docstring for Command"""
-  def __init__(self, cmd_text, error_message, success_message = "", error_value = 20, exception_value = 20):
+  def __init__(self, cmd_text, error_message, success_message = "", error_value = -1, exception_value = 20):
     self.cmd_text = cmd_text
     self.error_message = error_message
     self.error_value = error_value
