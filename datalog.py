@@ -62,10 +62,10 @@ class Command(object):
 
         print(result)
 
-      if "ERROR" in result:
-        close_all()
-        self.failed = True
-        self.failure_value = error_value
+        if "ERROR" in result:
+          close_all()
+          self.failed = True
+          self.failure_value = error_value
       except:
         print("error_message")
         self.failed = True
