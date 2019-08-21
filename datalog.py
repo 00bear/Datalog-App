@@ -50,7 +50,7 @@ relayState=[0,0,0,0]
 
 class Command(object):
   """docstring for Command"""
-  def __init__(self, cmd_text, error_message, success_message = "", error_value = -1, exception_value = 20):
+  def __init__(self, cmd_text, error_message, success_message = "{{result}}", error_value = -1, exception_value = 20):
     self.cmd_text = cmd_text
     self.error_message = error_message
     self.error_value = error_value
@@ -60,7 +60,7 @@ class Command(object):
       try:
         result = execute(self.cmd_text)
 
-        print(success_message + result)
+        print(success_message.format(result=result))
 
         if "ERROR" in result:
           close_all()
@@ -259,8 +259,8 @@ def init_Gprs():
   test_power = Command("AT", 'No AT Response Check Power.', exception_value = -1)
   conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
   conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
-  open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK ", error_value = -12)
-  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "eooo ")
+  open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {{result}}", error_value = -12)
+  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "eooo {{result}}")
 
 
   test_power.execute()
