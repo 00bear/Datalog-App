@@ -47,6 +47,28 @@ GPIO.output(relay[3],0)
 relayState=[0,0,0,0]
 
 
+class Command(object):
+  """docstring for Command"""
+  def __init__(self, cmd_text, error_message, error_value = 20, exception_value = -1):
+    self.cmd_text = cmd_text
+    self.error_message = error_message
+    self.error_value = error_value
+    self.failed = False
+
+    def execute(self):
+      try:
+        result = execute(self.cmd_text)
+
+        print(result)
+
+      if "ERROR" in result:
+        close_all()
+        self.failed = True
+        self.failure_value = error_value
+      except:
+        print("error_message")
+        self.failed = True
+        self.failure_value = exception_value
 
 
 def relayHandle(id,onoff):
@@ -232,22 +254,15 @@ def read_gps(firsttime):
 
 def init_Gprs():
   print('GPRS initial INIT.........')
-  try:
-    cmd = "AT"
 
-    result = execute(cmd)
+  test_power = Command("AT", 'No AT Response Check Power.', error_value = -1)
+  conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
+  conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
 
-    print(result)
 
-    if "ERROR" in result:
-
-      #return -1
-      close_all()
-
-      return -1
-  except:
-    print('No AT Response Check Power.')
-    return -1
+  test_power.execute()
+  if test_power.failed:
+    return test_power.failure_value
 
   try:
 	  cmd = "AT+CREG?"
@@ -282,41 +297,15 @@ def init_Gprs():
 
   time.sleep(2)
 
-  try:
-
-	  cmd = "AT+SAPBR=3,1,\"contype\",\"GPRS\""
-	
-	  result = execute(cmd)
-	
-	  print(result)
-	
-	  if "ERROR" in result:
-	
-	
-	    close_all()
-	
-	    return -1
-  except:
-    print("GPRS conType Error")
-    return 20
-
+  conf_contype.execute()
+  if conf_contype.failed:
+    return conf_contype.failure_value
 
   time.sleep(2)
-  try:
-	  cmd = "AT+SAPBR=3,1,\"APN\",\"simple\""
-	
-	  result = execute(cmd)
-	
-	  print(result)
-	
-	  if "ERROR" in result:
-	
-	    close_all()
-	
-	    return -1
-  except:
-    print("Apn Error")
-    return 20
+
+  conf_apn.execute()
+  if conf_apn.failed:
+    return conf_apn.failure_value
   #we have to enable gprs before any thing
 
   
