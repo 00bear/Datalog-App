@@ -50,7 +50,7 @@ relayState=[0,0,0,0]
 
 class Command(object):
   """docstring for Command"""
-  def __init__(self, cmd_text, error_message, error_value = 20, exception_value = -1):
+  def __init__(self, cmd_text, error_message, success_message = "", error_value = 20, exception_value = 20):
     self.cmd_text = cmd_text
     self.error_message = error_message
     self.error_value = error_value
@@ -60,7 +60,7 @@ class Command(object):
       try:
         result = execute(self.cmd_text)
 
-        print(result)
+        print(success_message + result)
 
         if "ERROR" in result:
           close_all()
@@ -256,9 +256,11 @@ def read_gps(firsttime):
 def init_Gprs():
   print('GPRS initial INIT.........')
 
-  test_power = Command("AT", 'No AT Response Check Power.', error_value = -1)
+  test_power = Command("AT", 'No AT Response Check Power.', error_value = -1, exception_value = -1)
   conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
   conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
+  open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK ", error_value = -12)
+  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "eooo ", error_value = -1)
 
 
   test_power.execute()
@@ -311,39 +313,17 @@ def init_Gprs():
 
   
   time.sleep(2)
-  try:
-    cmd = "AT+SAPBR=1,1"
 
-    result = execute(cmd)
-
-    print("is GPRS OK "+result)
- 
-    if "ERROR" in result:
-
-      close_all()
-
-      return -12
-  except:
-    print("GPRS indent Error")
-    return 20
+  open_ctx.execute()
+  if open_ctx.failed:
+    return open_ctx.failure_value
 
   time.sleep(5)
 
-  try:
-	  cmd = "AT+SAPBR=2,1"
-	
-	  result = execute(cmd)
-	
-	  print("eooo "+result)
-	 
-	  if "ERROR" in result:
-	
-	    close_all()
-	
-	    return -1
-  except:
-    print("GPRS params Error")
-    return 20
+  query_ctx.execute()
+  if query_ctx.failed:
+    return query_ctx.failure_value
+
   time.sleep(5)
 
   try:
