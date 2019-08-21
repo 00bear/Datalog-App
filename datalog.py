@@ -256,11 +256,11 @@ def read_gps(firsttime):
 def init_Gprs():
   print('GPRS initial INIT.........')
 
-  test_power = Command("AT", 'No AT Response Check Power.', error_value = -1, exception_value = -1)
+  test_power = Command("AT", 'No AT Response Check Power.', exception_value = -1)
   conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
   conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
   open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK ", error_value = -12)
-  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "eooo ", error_value = -1)
+  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "eooo ")
 
 
   test_power.execute()
