@@ -50,7 +50,7 @@ relayState=[0,0,0,0]
 
 class Command(object):
   """docstring for Command"""
-  def __init__(self, cmd_text, error_message, success_message = "{{result}}", error_value = -1, exception_value = 20):
+  def __init__(self, cmd_text, error_message, success_message = "{{result}}", error_value = -1, exception_value = 20, errback = None):
     self.cmd_text = cmd_text
     self.error_message = error_message
     self.error_value = error_value
@@ -58,9 +58,12 @@ class Command(object):
 
     def execute(self):
       try:
-        result = execute(self.cmd_text)
+        self.result = execute(self.cmd_text)
 
-        print(success_message.format(result=result))
+        print(success_message.format(result=self.result))
+
+        if errback:
+          errback(self)
 
         if "ERROR" in result:
           close_all()
@@ -254,9 +257,25 @@ def read_gps(firsttime):
     return 20
 
 def init_Gprs():
+  def net_errback(obj):
+    self.failed = True
+    if(len(obj.result) >= 22):
+      self.failure_value = 20
+      if(obj.result[20] == '3'):
+        print("REGISTRATION DENIED "+obj.result)
+      elif(result[20] == '0'):
+        print("No Network Found "+obj.result)
+      elif(result[20] == '2'):
+        print("Network Not Registered "+obj.result)
+      else:
+        self.failed = False
+    else:
+      self.failure_value = -1
+
   print('GPRS initial INIT.........')
 
   test_power = Command("AT", 'No AT Response Check Power.', exception_value = -1)
+  test_net = Command("AT+CREG?", "Sim Registration Error", "IS internet On #{{result}}#", errback = net_errback)
   conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
   conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
   open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {{result}}", error_value = -12)
@@ -267,36 +286,9 @@ def init_Gprs():
   if test_power.failed:
     return test_power.failure_value
 
-  try:
-	  cmd = "AT+CREG?"
-	
-	  result = execute(cmd)
-	
-	  print("IS internet On #"+result + "#")
-	  #print("IS internet On #"+result[17] + "#")
-	  #print("IS internet On #"+result[18] + "#")
-	  #print("IS internet On #"+result[19] + "#")
-	  #print("IS internet On #"+result[20] + "#")
-	  if(len(result) >= 22):
-	    if(result[20] == '3'):
-	      print("REGISTRATION DENIED "+result)
-	      return 20
-	    elif(result[20] == '0'):
-	      print("No Network Found "+result)
-	      return 20
-	    elif(result[20] == '2'):
-	      print("Network Not Registered "+result)
-	      return 20
-	  else:
-	    return -1
-	  if "ERROR" in result:
-	
-	    close_all()
-	
-	    return -1
-  except:
-    print("Sim Registration Error")
-    return 20
+  test_net.execute()
+  if test_net.failed:
+    return test_net.failure_value
 
   time.sleep(2)
 
