@@ -267,9 +267,9 @@ def init_Gprs():
       obj.failure_value = 20
       if(obj.result[20] == '3'):
         print("REGISTRATION DENIED "+obj.result)
-      elif(result[20] == '0'):
+      elif(obj.result[20] == '0'):
         print("No Network Found "+obj.result)
-      elif(result[20] == '2'):
+      elif(obj.result[20] == '2'):
         print("Network Not Registered "+obj.result)
       else:
         obj.failed = False
