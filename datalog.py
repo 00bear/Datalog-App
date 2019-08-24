@@ -56,6 +56,7 @@ class Command(object):
     self.success_message = success_message
     self.error_value = error_value
     self.failed = False
+    self.errback = errback
 
   def execute(self):
     try:
@@ -63,8 +64,8 @@ class Command(object):
 
       print(self.success_message.format(result=self.result))
 
-      if errback:
-        errback(self)
+      if self.errback:
+        self.errback(self)
 
       if "ERROR" in result:
         close_all()
