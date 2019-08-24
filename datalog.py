@@ -289,31 +289,10 @@ def init_Gprs():
   open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {result}", error_value = -12, waiting_time = 5)
   query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "is params ok {result}", waiting_time = 5)
 
-
-  test_power.execute()
-  if test_power.failed:
-    return test_power.failure_value
-
-  test_net.execute()
-  if test_net.failed:
-    return test_net.failure_value
-
-  conf_contype.execute()
-  if conf_contype.failed:
-    return conf_contype.failure_value
-
-  conf_apn.execute()
-  if conf_apn.failed:
-    return conf_apn.failure_value
-  #we have to enable gprs before any thing
-
-  open_ctx.execute()
-  if open_ctx.failed:
-    return open_ctx.failure_value
-
-  query_ctx.execute()
-  if query_ctx.failed:
-    return query_ctx.failure_value
+  for command in [test_power, test_net, conf_contype, conf_apn, open_ctx, query_ctx]:
+    command.execute()
+    if command.failed:
+      return command.failure_value
 
   try:
     cmd = "AT+HTTPINIT"
