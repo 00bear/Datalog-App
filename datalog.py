@@ -56,23 +56,23 @@ class Command(object):
     self.error_value = error_value
     self.failed = False
 
-    def execute(self):
-      try:
-        self.result = execute(self.cmd_text)
+  def execute(self):
+    try:
+      self.result = execute(self.cmd_text)
 
-        print(success_message.format(result=self.result))
+      print(success_message.format(result=self.result))
 
-        if errback:
-          errback(self)
+      if errback:
+        errback(self)
 
-        if "ERROR" in result:
-          close_all()
-          self.failed = True
-          self.failure_value = error_value
-      except:
-        print("error_message")
+      if "ERROR" in result:
+        close_all()
         self.failed = True
-        self.failure_value = exception_value
+        self.failure_value = error_value
+    except:
+      print("error_message")
+      self.failed = True
+      self.failure_value = exception_value
 
 
 def relayHandle(id,onoff):
