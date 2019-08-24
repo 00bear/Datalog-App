@@ -67,7 +67,7 @@ class Command(object):
       if self.errback:
         self.errback()
 
-      if "ERROR" in result:
+      if "ERROR" in self.result:
         close_all()
         self.failed = True
         self.failure_value = error_value
