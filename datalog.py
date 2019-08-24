@@ -50,7 +50,7 @@ relayState=[0,0,0,0]
 
 class Command(object):
   """docstring for Command"""
-  def __init__(self, cmd_text, error_message, success_message = "{result}", error_value = -1, exception_value = 20, errback = None):
+  def __init__(self, cmd_text, error_message, success_message = "{result}", error_value = -1, exception_value = 20, errback = None, waiting_time = 0):
     self.cmd_text = cmd_text
     self.error_message = error_message
     self.success_message = success_message
@@ -58,6 +58,7 @@ class Command(object):
     self.exception_value = exception_value
     self.failed = False
     self.errback = errback
+    self.waiting_time = waiting_time
 
   def execute(self):
     try:
@@ -77,6 +78,9 @@ class Command(object):
       print(self.error_message)
       self.failed = True
       self.failure_value = self.exception_value
+
+    if self.waiting_time > 0:
+      time.sleep(self.waiting_time)
 
 
 def relayHandle(id,onoff):
@@ -279,11 +283,11 @@ def init_Gprs():
   print('GPRS initial INIT.........')
 
   test_power = Command("AT", 'No AT Response Check Power.', exception_value = -1)
-  test_net = Command("AT+CREG?", "Sim Registration Error", "IS internet On #{result}#", errback = net_errback)
-  conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error")
-  conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error")
-  open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {result}", error_value = -12)
-  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "is params ok {result}")
+  test_net = Command("AT+CREG?", "Sim Registration Error", "IS internet On #{result}#", errback = net_errback, waiting_time = 2)
+  conf_contype = Command("AT+SAPBR=3,1,\"contype\",\"GPRS\"", "GPRS conType Error", waiting_time = 2)
+  conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error", waiting_time = 2)
+  open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {result}", error_value = -12, waiting_time = 5)
+  query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "is params ok {result}", waiting_time = 5)
 
 
   test_power.execute()
@@ -294,33 +298,22 @@ def init_Gprs():
   if test_net.failed:
     return test_net.failure_value
 
-  time.sleep(2)
-
   conf_contype.execute()
   if conf_contype.failed:
     return conf_contype.failure_value
-
-  time.sleep(2)
 
   conf_apn.execute()
   if conf_apn.failed:
     return conf_apn.failure_value
   #we have to enable gprs before any thing
 
-  
-  time.sleep(2)
-
   open_ctx.execute()
   if open_ctx.failed:
     return open_ctx.failure_value
 
-  time.sleep(5)
-
   query_ctx.execute()
   if query_ctx.failed:
     return query_ctx.failure_value
-
-  time.sleep(5)
 
   try:
     cmd = "AT+HTTPINIT"
