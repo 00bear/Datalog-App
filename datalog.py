@@ -55,6 +55,7 @@ class Command(object):
     self.error_message = error_message
     self.success_message = success_message
     self.error_value = error_value
+    self.exception_value = exception_value
     self.failed = False
     self.errback = errback
 
@@ -70,12 +71,12 @@ class Command(object):
       if "ERROR" in self.result:
         close_all()
         self.failed = True
-        self.failure_value = error_value
+        self.failure_value = self.error_value
     except Exception as e:
       print(e)
       print(self.error_message)
       self.failed = True
-      self.failure_value = exception_value
+      self.failure_value = self.exception_value
 
 
 def relayHandle(id,onoff):
