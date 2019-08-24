@@ -288,7 +288,7 @@ def init_Gprs():
   conf_apn = Command("AT+SAPBR=3,1,\"APN\",\"simple\"", "Apn Error", waiting_time = 2)
   open_ctx = Command("AT+SAPBR=1,1", "GPRS Context Error", "is GPRS OK {result}", error_value = -12, waiting_time = 5)
   query_ctx = Command("AT+SAPBR=2,1", "GPRS params Error", "is params ok {result}", waiting_time = 5)
-  init_http = Command("AT+HTTPINIT", "Already running Error", "Init HTTP {result}")
+  init_http = Command("AT+HTTPINIT", "Already running Error", "Init HTTP {result}", error_value = 200)
 
   for command in [test_power, test_net, conf_contype, conf_apn, open_ctx, query_ctx, init_http]:
     command.execute()
