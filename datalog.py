@@ -56,7 +56,7 @@ class Command(object):
     self.success_message = success_message
     self.error_value = error_value
     self.failed = False
-    self.errback = errback
+    self.errback = staticmethod(errback)
 
   def execute(self):
     try:
