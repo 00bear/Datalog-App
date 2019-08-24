@@ -49,7 +49,17 @@ relayState=[0,0,0,0]
 
 
 class Command(object):
-  """docstring for Command"""
+  """Command object allows executon of commands that are sent to the GPRS module.
+
+  cmd_text: text to send to the module
+  error_message: printed message in case there is an exception raised
+  success_message: shown when the command succeeds, written in terms of execution result
+  error_value: value returned in case the module returns ERROR
+  exception_value: value returned in case that an exception was raised
+  errback: function called to check for aditional errors - Command object passed as argument
+  waitintg_time: time waited for after command execution
+
+  """
   def __init__(self, cmd_text, error_message, success_message = "{result}", error_value = -1, exception_value = 20, errback = None, waiting_time = 0):
     self.cmd_text = cmd_text
     self.error_message = error_message
