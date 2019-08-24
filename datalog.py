@@ -66,7 +66,7 @@ class Command(object):
       print(self.success_message.format(result=self.result))
 
       if self.errback:
-        self.errback()
+        self.errback(self)
 
       if "ERROR" in self.result:
         close_all()
