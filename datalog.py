@@ -56,7 +56,7 @@ class Command(object):
     self.success_message = success_message
     self.error_value = error_value
     self.failed = False
-    self.errback = staticmethod(errback)
+    self.errback = errback
 
   def execute(self):
     try:
@@ -65,7 +65,7 @@ class Command(object):
       print(self.success_message.format(result=self.result))
 
       if self.errback:
-        self.errback(self)
+        self.errback()
 
       if "ERROR" in result:
         close_all()
