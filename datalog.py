@@ -70,7 +70,7 @@ class Command(object):
         self.failed = True
         self.failure_value = error_value
     except:
-      print("error_message")
+      print(self.error_message)
       self.failed = True
       self.failure_value = exception_value
 
