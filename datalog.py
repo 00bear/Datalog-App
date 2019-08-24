@@ -667,35 +667,35 @@ def startLogging():
         time.sleep(0.2)
         #lng,lat = read_gps(0)
         location = 0
-      while location < 2:
-        if(len(lat) <= 3 and len(lng) <= 3):
-          lng,lat = read_gps(0)
-          print("GPS reading")
-          time.sleep(1)
-        else:
-          location = 2
+        while location < 2:
+          if(len(lat) <= 3 and len(lng) <= 3):
+            lng,lat = read_gps(0)
+            print("GPS reading")
+            time.sleep(1)
+          else:
+            location = 2
           print("Location acquired")
-        time.sleep(0.2)
-        code = send_gsm(temp,date,lng,lat,motionS,1)
-        time.sleep(0.2)
-      time.sleep(4)
-      #close_all()
-      #code = -1
-      if(code == -1):
-        print("Error in Sim800 "+str(code))
-        print("Executing Again "+str(code))
-        #init_all()
-        #init_Gprs()
-        systemInit()
-        initGprsParams()
-        powerOnGps()
-        time.sleep(4)
-        #tryCode = recursiveMethod()
-        #if(tryCode == -1):
-          # print("Error in Sim800 "+str(code))
-           #print("Executing Again "+str(code))
-           #tryCode = recursiveMethod()
-           #continue
+          time.sleep(0.2)
+          code = send_gsm(temp,date,lng,lat,motionS,1)
+          time.sleep(0.2)
+          time.sleep(4)
+          #close_all()
+          #code = -1
+          if(code == -1):
+            print("Error in Sim800 "+str(code))
+            print("Executing Again "+str(code))
+            #init_all()
+            #init_Gprs()
+            systemInit()
+            initGprsParams()
+            powerOnGps()
+            time.sleep(4)
+            #tryCode = recursiveMethod()
+            #if(tryCode == -1):
+              # print("Error in Sim800 "+str(code))
+               #print("Executing Again "+str(code))
+               #tryCode = recursiveMethod()
+               #continue
         continue
    
 def main(motionV):
