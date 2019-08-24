@@ -262,9 +262,9 @@ def read_gps(firsttime):
 
 def init_Gprs():
   def net_errback(obj):
-    self.failed = True
+    obj.failed = True
     if(len(obj.result) >= 22):
-      self.failure_value = 20
+      obj.failure_value = 20
       if(obj.result[20] == '3'):
         print("REGISTRATION DENIED "+obj.result)
       elif(result[20] == '0'):
@@ -272,9 +272,9 @@ def init_Gprs():
       elif(result[20] == '2'):
         print("Network Not Registered "+obj.result)
       else:
-        self.failed = False
+        obj.failed = False
     else:
-      self.failure_value = -1
+      obj.failure_value = -1
 
   print('GPRS initial INIT.........')
 
