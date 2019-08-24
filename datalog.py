@@ -71,7 +71,8 @@ class Command(object):
         close_all()
         self.failed = True
         self.failure_value = error_value
-    except:
+    except Exception as e:
+      print(e)
       print(self.error_message)
       self.failed = True
       self.failure_value = exception_value
