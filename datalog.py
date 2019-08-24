@@ -53,6 +53,7 @@ class Command(object):
   def __init__(self, cmd_text, error_message, success_message = "{{result}}", error_value = -1, exception_value = 20, errback = None):
     self.cmd_text = cmd_text
     self.error_message = error_message
+    self.success_message = success_message
     self.error_value = error_value
     self.failed = False
 
@@ -60,7 +61,7 @@ class Command(object):
     try:
       self.result = execute(self.cmd_text)
 
-      print(success_message.format(result=self.result))
+      print(self.success_message.format(result=self.result))
 
       if errback:
         errback(self)
