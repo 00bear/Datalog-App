@@ -17,7 +17,7 @@ temp_sensor_path = '/sys/bus/w1/devices/28-020791774287/w1_slave'
 #defining specefic user id for a device
 uID = 1
 
-enableMotion=False
+enableMotion=True
 enableButtons=False
 #motion_pin = 11
 motion_pin = 40
