@@ -462,10 +462,10 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
   return 200
 
 def motionDetect(pin):
-  global motion_pin,motion_detected
+  global motion_detected
   print('detecting motion')
   #return GPIO.input(sensor_pin)
-  if(GPIO.input(motion_pin)):
+  if(GPIO.input(pin)):
     print("motion detected pin high")
     motion_detected=1
     print('motion value=',motion_detected)
@@ -482,7 +482,7 @@ def motionfallingDetect():
     GPIO.remove_event_detect(motion_pin)
 
     
-def b1(self):
+def b1(pin):
   global relayState
 
   if(GPIO.input(buttons[0])==0):
@@ -495,7 +495,7 @@ def b1(self):
       relayState[0]=0
       relayHandle(0,0)
       
-def b2(self):
+def b2(pin):
   global relayState
 
   if(GPIO.input(buttons[1])==0):
@@ -508,7 +508,7 @@ def b2(self):
       relayState[1]=0
       relayHandle(1,0)
       
-def b3(self):
+def b3(pin):
   global relayState
 
   if(GPIO.input(buttons[2])==0):
@@ -522,7 +522,7 @@ def b3(self):
       relayHandle(2,0)
     time.sleep(1.5)
       
-def b4(self):
+def b4(pin):
   global relayState
 
   if(GPIO.input(buttons[3])==0):
