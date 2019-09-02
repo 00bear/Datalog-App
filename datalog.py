@@ -326,7 +326,7 @@ def get_url(temp, date, lng, lat, motion):
   qstring = urllib.parse.urlencode(qdict)
   return base + qstring
 
-def send_gsm(temp, date, lng, lat, motion, firsttime):
+def send_gsm(temp, date, lng, lat, motion):
     
   global motion_detected, uID
   
@@ -542,7 +542,7 @@ def recursiveMethod():
   time.sleep(0.2)
   motionS = 1
 	     
-  code = send_gsm(temp,date,lng,lat,motionS,1)
+  code = send_gsm(temp,date,lng,lat,motionS)
   time.sleep(0.2)
   return code
  
@@ -662,7 +662,7 @@ def startLogging():
       time.sleep(1)
     print("Location acquired")
     time.sleep(0.2)
-    code = send_gsm(temp,date,lng,lat,motion_detected,1)
+    code = send_gsm(temp, date, lng, lat, motion_detected)
     restart_motion_detection()
     time.sleep(3.5)
     if(code == -1):
