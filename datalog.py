@@ -24,7 +24,7 @@ motion_pin = 40
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-motionVal=0  #global motion variable
+motion_detected=0  #global motion variable
 relay=[18,13,15,16]  #GPIO List
 buttons=[22,24,26,32]
 GPIO.setup(motion_pin,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
@@ -328,7 +328,7 @@ def get_url(temp, date, lng, lat, motion):
 
 def send_gsm(temp, date, lng, lat, motion, firsttime):
     
-  global motionVal, uID
+  global motion_detected, uID
   
   dataStr = ""
   print('GPRS Data Execution.........')
@@ -462,17 +462,17 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
   return 200
 
 def motionDetect(self):
-  global motion_pin,motionVal
+  global motion_pin,motion_detected
   print('detecting motion')
   #return GPIO.input(sensor_pin)
   if(GPIO.input(motion_pin)):
     print("motion detected pin high")
-    motionVal=1
-    print('motion value=',motionVal)
+    motion_detected=1
+    print('motion value=',motion_detected)
     
   else:
     print('motion detected pin low')
-    motionVal=motionVal
+    motion_detected=motion_detected
 
       
 def motionfallingDetect():
@@ -603,9 +603,9 @@ def testFunctionMotion():
     #motion test
     testMotion = 1
     while testMotion ==1:
-      if(motionVal == 1):
+      if(motion_detected == 1):
         print("Motion 1")
-        motionVal = 0
+        motion_detected = 0
       print("Motion Loop")
       time.sleep(2)
 
@@ -639,7 +639,7 @@ def initGprsParams():
     return 20
 
 def startLogging():
-    global motionVal
+    global motion_detected
     motionVarient = 0
     lng = '0'
     lat = '0'
@@ -649,10 +649,10 @@ def startLogging():
     while var == 1:
       print("Running Forever")
       if(enableMotion == False):
-        motionVal = 1
-      if(motionVal == 1):
+        motion_detected = 1
+      if(motion_detected == 1):
         motionVarient = motionVarient + 1
-        motionVal = 0
+        motion_detected = 0
         print('Varient Added : ' + str(motionVarient))
       if(motionVarient >= 2):
         motionS = 1
@@ -700,7 +700,7 @@ def startLogging():
    
 def main(motionV):
     
-    global motionVal,motion_pin, port
+    global motion_detected,motion_pin, port
     print('MAIN Data Execution.........')
     date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
     print("Date: ", date)
