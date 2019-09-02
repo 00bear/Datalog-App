@@ -634,6 +634,48 @@ def initGprsParams():
   except:
     return 20
 
+
+def restart_motion_detection():
+  global motion_detected
+  if enableMotion and motion_detected:
+    motion_detected = False
+    GPIO.add_event_detect(motion_pin, GPIO.RISING, callback=motionDetect)
+
+
+def startLogging():
+  lng = '0'
+  lat = '0'
+  temp = 0
+  while True:
+    print("Running Forever")
+
+    date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
+    print("Date: ", date)
+    try:
+      temp = str(tempRead())
+    except:
+      print("Temperature sensor not present")
+    time.sleep(0.2)
+    while len(lat) <= 3 and len(lng) <= 3:
+      lng,lat = read_gps(0)
+      print("GPS reading")
+      time.sleep(1)
+    print("Location acquired")
+    time.sleep(0.2)
+    code = send_gsm(temp,date,lng,lat,motion_detected,1)
+    restart_motion_detection()
+    time.sleep(3.5)
+    if(code == -1):
+      print("Error in Sim800 "+str(code))
+      print("Executing Again "+str(code))
+      #init_all()
+      #init_Gprs()
+      systemInit()
+      initGprsParams()
+      powerOnGps()
+      time.sleep(4)
+
+"""
 def startLogging():
     global motion_detected
     motionVarient = 0
@@ -693,6 +735,7 @@ def startLogging():
                #tryCode = recursiveMethod()
                #continue
         continue
+"""
    
 def main(motionV):
     
