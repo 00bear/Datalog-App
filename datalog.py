@@ -462,6 +462,7 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
   return 200
 
 def motionDetect(pin):
+  """Sets motion_detected to True and disables interrupt."""
   global motion_detected
   print('detecting motion')
   #return GPIO.input(sensor_pin)
