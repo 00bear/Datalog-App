@@ -24,7 +24,7 @@ motion_pin = 40
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-motion_detected=0  #global motion variable
+motion_detected = False # flag that is set to True if motion has been detected but is yet to be processed
 relay=[18,13,15,16]  #GPIO List
 buttons=[22,24,26,32]
 GPIO.setup(motion_pin,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
