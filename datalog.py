@@ -206,6 +206,12 @@ def tempRead():
 
   return f_temp
 
+def dateRead():
+  """Read current date"""
+  date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
+  print("Date: ", date)
+  return date
+
 
 def powerOnGps():
 
@@ -534,8 +540,7 @@ def b4(pin):
 def recursiveMethod():
   temp = str(tempRead())
   time.sleep(0.2)
-  date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
-  print("Date: ", date)
+  date = dateRead()
   powerOnGps()
   time.sleep(0.2)
   lng,lat = read_gps(0)
@@ -649,8 +654,7 @@ def startLogging():
   while True:
     print("Running Forever")
 
-    date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
-    print("Date: ", date)
+    date = dateRead()
     try:
       temp = str(tempRead())
     except:
@@ -741,8 +745,7 @@ def main(motionV):
     
     global motion_detected,motion_pin, port
     print('MAIN Data Execution.........')
-    date = strftime("%Y-%m-%d ") + strftime("%H:%M:%S")
-    print("Date: ", date)
+    dateRead()
     gprsInit = 0
 
     
