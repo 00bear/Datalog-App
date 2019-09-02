@@ -467,14 +467,8 @@ def motionDetect(pin):
   print('detecting motion')
   assert GPIO.input(pin)
   #return GPIO.input(sensor_pin)
-  if(GPIO.input(pin)):
-    print("motion detected pin high")
-    motion_detected=1
-    print('motion value=',motion_detected)
-    
-  else:
-    print('motion detected pin low')
-    motion_detected=motion_detected
+  motion_detected = True
+  GPIO.remove_event_detect(pin)
 
       
 def motionfallingDetect():
