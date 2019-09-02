@@ -19,8 +19,8 @@ uID = 1
 
 enableMotion=True
 enableButtons=False
-#motion_pin = 11
-motion_pin = 40
+motion_pin = 11
+#motion_pin = 40
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
