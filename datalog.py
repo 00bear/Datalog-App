@@ -461,7 +461,7 @@ def send_gsm(temp, date, lng, lat, motion, firsttime):
 
   return 200
 
-def motionDetect(self):
+def motionDetect(pin):
   global motion_pin,motion_detected
   print('detecting motion')
   #return GPIO.input(sensor_pin)
