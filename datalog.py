@@ -480,7 +480,7 @@ def motionDetect(pin):
   else:
     motion_detected = False
   #GPIO.remove_event_detect(pin)
-  print('motion_detected = ', motion_detected)
+  print('motion detected?', motion_detected)
   print('----------------------------------------------------------')
 
       
