@@ -333,9 +333,8 @@ def get_url(temp, date, lng, lat, motion):
   qstring = urllib.parse.urlencode(qdict)
   return base + qstring
 
-def send_gsm(temp, date, lng, lat, motion):
-    
-  global motion_detected, uID
+def send_gsm(temp, date, lng, lat):
+  global motion_detected, uID, waiting_for_motion
   
   dataStr = ""
   print('GPRS Data Execution.........')
@@ -375,6 +374,8 @@ def send_gsm(temp, date, lng, lat, motion):
     return 20
 
   time.sleep(2)
+
+  motion = 0 if waiting_for_motion else 1
   
   try:
      #cmd = "AT+HTTPPARA=\"URL\",\"http://hologram.io/test.html"
@@ -382,7 +383,6 @@ def send_gsm(temp, date, lng, lat, motion):
      
      cmd = 'AT+HTTPPARA="URL","' + get_url(temp, date, lng, lat, motion) + '"'
      #cmd = "AT+HTTPPARA=\"URL\",\""
-     time.sleep(0.05)
      dataStr += "datetime="+str(date)
      dataStr += "temprature="+str(temp)
      dataStr += "latitude="+str(lat)
@@ -390,7 +390,6 @@ def send_gsm(temp, date, lng, lat, motion):
      dataStr += "motion="+str(motion)
      dataStr += "userId="+str(uID)
      print('cmd=======',cmd)
-     time.sleep(0.05)
      result = execute(cmd)
 	
      print(result)
@@ -431,8 +430,10 @@ def send_gsm(temp, date, lng, lat, motion):
     return 20
 
   time.sleep(2)
-    
-
+  
+  waiting_for_motion = True if enableMotion and not motion_detected else False
+  print('waiting_for_motion set to', waiting_for_motion)
+  GPIO.remove_event_detect(motion_pin)
 
   try:
     cmd = "AT+HTTPACTION=1"
@@ -447,6 +448,8 @@ def send_gsm(temp, date, lng, lat, motion):
   except:
     print("Post Error")
     return 20
+
+  GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
 
   time.sleep(2)
 
@@ -678,9 +681,7 @@ def startLogging():
       time.sleep(1)
     print("Location acquired")
     time.sleep(0.2)
-    code = send_gsm(temp, date, lng, lat, 0 if waiting_for_motion else 1)
-    print('setting waiting_for_motion')
-    waiting_for_motion = True if enableMotion and not motion_detected else False
+    code = send_gsm(temp, date, lng, lat)
     time.sleep(3.5)
     if(code == -1):
       print("Error in Sim800 "+str(code))
