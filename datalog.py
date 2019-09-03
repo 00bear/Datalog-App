@@ -449,9 +449,9 @@ def send_gsm(temp, date, lng, lat):
     print("Post Error")
     return 20
 
-  GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
-
   time.sleep(2)
+
+  GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
 
 #+HTTPACTION: 1,603,0. its network error.
 
@@ -466,8 +466,8 @@ def send_gsm(temp, date, lng, lat):
       close_all()
       return -1
   except:
-    	  print("Http Terminate Error")
-    	  return 20
+    print("Http Terminate Error")
+    return 20
 
   return 200
 
