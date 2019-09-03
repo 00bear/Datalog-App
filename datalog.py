@@ -643,7 +643,7 @@ def initGprsParams():
 
 
 def restart_motion_detection():
-  global motion_detected
+  global motion_detected, motion_pin
   pvalue = GPIO.input(motion_pin)
   print('motion_pin value during restart_motion_detection call: ', pvalue)
   if enableMotion and motion_detected and pvalue == 0:
