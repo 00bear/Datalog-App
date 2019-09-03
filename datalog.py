@@ -679,7 +679,8 @@ def startLogging():
     print("Location acquired")
     time.sleep(0.2)
     code = send_gsm(temp, date, lng, lat, 0 if waiting_for_motion else 1)
-    waiting_for_motion = True if enableMotion and motion_detected else False
+    print('setting waiting_for_motion')
+    waiting_for_motion = True if enableMotion and not motion_detected else False
     time.sleep(3.5)
     if(code == -1):
       print("Error in Sim800 "+str(code))
