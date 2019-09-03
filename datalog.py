@@ -473,7 +473,6 @@ def motionDetect(pin):
   global motion_detected, waiting_for_motion
   print('----------------------------------------------------------')
   print('motion state changed')
-  print('----------------------------------------------------------')
   #assert GPIO.input(pin)
   if GPIO.input(pin) == GPIO.HIGH:
     motion_detected = True
@@ -481,6 +480,8 @@ def motionDetect(pin):
   else:
     motion_detected = False
   #GPIO.remove_event_detect(pin)
+  print('motion_detected = ', motion_detected)
+  print('----------------------------------------------------------')
 
       
 def motionfallingDetect():
