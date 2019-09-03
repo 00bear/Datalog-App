@@ -763,6 +763,7 @@ def addInterrupts():
     global motion_pin
     if(enableMotion):
       GPIO.add_event_detect(motion_pin, GPIO.RISING, callback=motionDetect )
+      print('initial motion detection added')
 
     if(enableButtons):
       GPIO.add_event_detect(buttons[0], GPIO.BOTH, callback=b1 )
