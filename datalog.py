@@ -376,6 +376,8 @@ def send_gsm(temp, date, lng, lat):
   time.sleep(2)
 
   motion = 0 if waiting_for_motion else 1
+  waiting_for_motion = True if enableMotion and not motion_detected else False
+  print('waiting_for_motion set to', waiting_for_motion)
   
   try:
      #cmd = "AT+HTTPPARA=\"URL\",\"http://hologram.io/test.html"
@@ -431,8 +433,6 @@ def send_gsm(temp, date, lng, lat):
 
   time.sleep(2)
   
-  waiting_for_motion = True if enableMotion and not motion_detected else False
-  print('waiting_for_motion set to', waiting_for_motion)
   GPIO.remove_event_detect(motion_pin)
 
   try:
