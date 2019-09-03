@@ -24,7 +24,8 @@ motion_pin = 11
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-motion_detected = False # flag that is set to True if motion has been detected but is yet to be processed
+motion_detected = False # flag that is set to True if motion is currently being detected
+waiting_for_motion = False # flag is set to True if motion hasn't occured yet within a loop iteration
 relay=[18,13,15,16]  #GPIO List
 buttons=[22,24,26,32]
 GPIO.setup(motion_pin,GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
@@ -469,14 +470,17 @@ def send_gsm(temp, date, lng, lat, motion):
 
 def motionDetect(pin):
   """Sets motion_detected to True and disables interrupt."""
-  global motion_detected
+  global motion_detected, waiting_for_motion
   print('----------------------------------------------------------')
-  print('detecting motion')
+  print('motion state changed')
   print('----------------------------------------------------------')
-  assert GPIO.input(pin)
-  #return GPIO.input(sensor_pin)
-  motion_detected = True
-  GPIO.remove_event_detect(pin)
+  #assert GPIO.input(pin)
+  if GPIO.input(pin) == GPIO.HIGH:
+    motion_detected = True
+    waiting_for_motion = False
+  else:
+    motion_detected = False
+  #GPIO.remove_event_detect(pin)
 
       
 def motionfallingDetect():
@@ -653,9 +657,11 @@ def restart_motion_detection():
 
 
 def startLogging():
+  global waiting_for_motion
   lng = '0'
   lat = '0'
   temp = 0
+  waiting_for_motion = True
   while True:
     print("Running Forever")
 
@@ -671,8 +677,8 @@ def startLogging():
       time.sleep(1)
     print("Location acquired")
     time.sleep(0.2)
-    code = send_gsm(temp, date, lng, lat, 1 if motion_detected else 0)
-    restart_motion_detection()
+    code = send_gsm(temp, date, lng, lat, 0 if waiting_for_motion else 1)
+    waiting_for_motion = True if enableMotion and motion_detected else False
     time.sleep(3.5)
     if(code == -1):
       print("Error in Sim800 "+str(code))
@@ -762,8 +768,7 @@ def main(motionV):
 def addInterrupts(): 
     global motion_pin
     if(enableMotion):
-      GPIO.add_event_detect(motion_pin, GPIO.RISING, callback=motionDetect )
-      print('initial motion detection added')
+      GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
 
     if(enableButtons):
       GPIO.add_event_detect(buttons[0], GPIO.BOTH, callback=b1 )
