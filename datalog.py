@@ -666,7 +666,7 @@ def startLogging():
       time.sleep(1)
     print("Location acquired")
     time.sleep(0.2)
-    code = send_gsm(temp, date, lng, lat, motion_detected)
+    code = send_gsm(temp, date, lng, lat, 1 if motion_detected else 0)
     restart_motion_detection()
     time.sleep(3.5)
     if(code == -1):
