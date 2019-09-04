@@ -451,8 +451,6 @@ def send_gsm(temp, date, lng, lat):
 
   time.sleep(2)
 
-  GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
-
 #+HTTPACTION: 1,603,0. its network error.
 
   try:
@@ -468,6 +466,10 @@ def send_gsm(temp, date, lng, lat):
   except:
     print("Http Terminate Error")
     return 20
+
+  time.sleep(2)
+
+  GPIO.add_event_detect(motion_pin, GPIO.BOTH, callback=motionDetect)
 
   return 200
 
@@ -682,7 +684,7 @@ def startLogging():
     print("Location acquired")
     time.sleep(0.2)
     code = send_gsm(temp, date, lng, lat)
-    time.sleep(3.5)
+    time.sleep(1.5)
     if(code == -1):
       print("Error in Sim800 "+str(code))
       print("Executing Again "+str(code))
